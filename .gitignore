@@ -1,3 +1,14 @@
-data/
+# Pastas de cache e modelos pesados
 .ipynb_checkpoints/
 __pycache__/
+.cache/
+models/
+*.bin
+*.safetensors
+*.pt
+
+# Dados
+data/
+
+# Sistema
+.DS_Store
