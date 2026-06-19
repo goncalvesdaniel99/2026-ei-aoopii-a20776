@@ -1,0 +1,11 @@
+# Dependências comuns (baseline local + app Gradio).
+# Para o backend CatVTON no Colab, ver notebooks/colab_tryon.ipynb (instala extras).
+torch>=2.1
+diffusers>=0.27
+transformers>=4.38
+accelerate>=0.27
+huggingface_hub>=0.23
+opencv-python>=4.8
+pillow>=10.0
+numpy>=1.24
+gradio>=4.0
