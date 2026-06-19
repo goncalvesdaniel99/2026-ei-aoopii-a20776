@@ -116,17 +116,19 @@ class CatVTONBackend(TryOnBackend):
         device="cuda",
     ):
         import torch
-        from huggingface_hub import snapshot_download
         # Importado do repo clonado do CatVTON (model/pipeline.py).
         from model.pipeline import CatVTONPipeline
 
-        repo_path = snapshot_download(repo_id=catvton_repo)
+        # A própria pipeline descarrega os pesos do HF Hub (snapshot_download interno)
+        # quando attn_ckpt não é um caminho local. skip_safety_check evita carregar o
+        # safety checker (poupa memória e dependências do modelo base).
         self.pipeline = CatVTONPipeline(
             base_ckpt=base_model,
-            attn_ckpt=repo_path,
+            attn_ckpt=catvton_repo,
             attn_ckpt_version="mix",
             weight_dtype=torch.float16,
             device=device,
+            skip_safety_check=True,
         )
         self.width, self.height = width, height
         self.device = device
