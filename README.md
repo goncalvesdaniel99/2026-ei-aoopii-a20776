@@ -27,6 +27,32 @@ inpainting *genérico* não faz try-on fiel, porque não foi treinado para a tar
 `catvton` usa um modelo específico de try-on e dá os resultados fiéis. A seleção é
 automática: havendo GPU usa `catvton`, caso contrário `inpaint`.
 
+## Comparação: SD Inpainting vs. CatVTON
+
+Com o **mesmo input** (pessoa + peça + máscara), os dois backends dão resultados muito
+diferentes. Exemplo com uma t-shirt Adidas de 3 riscas:
+
+**Baseline — SD Inpainting + IP-Adapter** (modelo genérico, não treinado para try-on):
+
+![Baseline SD Inpainting](docs/imagens/SDInpainting.PNG)
+
+O modelo apanha a *ideia* geral (azul-marinho, riscas) mas **inventa** a peça — sai uma
+camisola de riscas que **não** é a t-shirt Adidas original. O IP-Adapter só dá uma impressão
+global; não preserva a geometria nem o padrão exato.
+
+**CatVTON** (modelo treinado para try-on):
+
+![CatVTON](docs/imagens/catVTON.PNG)
+
+A peça é **preservada fielmente**: as 3 riscas, a gola branca e o logótipo da Adidas
+aparecem corretamente na pessoa, adaptados ao corpo.
+
+| Aspeto | SD Inpainting (baseline) | CatVTON |
+|---|---|---|
+| Fidelidade ao padrão/logótipo | Baixa — inventa a peça | Alta — preserva a peça |
+| Treinado para try-on | Não | Sim |
+| Hardware | CPU / Apple MPS | GPU (Colab T4) |
+
 ## Tech stack
 - **Linguagem:** Python
 - **Deep Learning:** PyTorch, Diffusers, CatVTON, IP-Adapter
