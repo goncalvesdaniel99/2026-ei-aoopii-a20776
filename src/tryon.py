@@ -170,9 +170,15 @@ class InpaintBackend(TryOnBackend):
     name = "inpaint"
 
     def __init__(self, model_id="runwayml/stable-diffusion-inpainting",
-                 device=None, use_ip_adapter=True):
+                 device=None, use_ip_adapter=None):
         import torch
         from diffusers import StableDiffusionInpaintPipeline
+
+        # Permite desligar o IP-Adapter por ambiente (TRYON_IP_ADAPTER=0) para caber
+        # em GPUs/memória pequenas (ex.: Mac de 8 GB): sem IP-Adapter ativa-se o
+        # attention slicing e o consumo desce o suficiente para não rebentar.
+        if use_ip_adapter is None:
+            use_ip_adapter = os.environ.get("TRYON_IP_ADAPTER", "1") == "1"
 
         if device is None:
             device = "mps" if torch.backends.mps.is_available() else "cpu"
@@ -193,8 +199,12 @@ class InpaintBackend(TryOnBackend):
                 "h94/IP-Adapter", subfolder="models", weight_name="ip-adapter_sd15.bin"
             )
             self.pipe.set_ip_adapter_scale(0.7)
+        else:
+            # O attention slicing poupa memória, mas é INCOMPATÍVEL com o IP-Adapter:
+            # substitui os attention processors do IP-Adapter e rebenta com
+            # "'tuple' object has no attribute 'shape'". Só o ativamos sem IP-Adapter.
+            self.pipe.enable_attention_slicing("max")
 
-        self.pipe.enable_attention_slicing("max")
         try:
             self.pipe.enable_vae_tiling()
         except Exception:

@@ -10,5 +10,9 @@ models/
 # Dados
 data/
 
+# Ambiente virtual e artefactos de teste
+.venv/
+mask_preview.png
+
 # Sistema
 .DS_Store
