@@ -1,0 +1,11 @@
+# Normaliza fins de linha (evita avisos LF/CRLF entre Windows e Linux/Colab)
+* text=auto
+
+# Codigo Python sempre com LF
+*.py text eol=lf
+
+# Notebooks e imagens tratados como binario (sem normalizacao)
+*.ipynb -text
+*.png binary
+*.jpg binary
+*.pptx binary
