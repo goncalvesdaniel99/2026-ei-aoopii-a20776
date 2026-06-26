@@ -29,7 +29,7 @@ automática: havendo GPU usa `catvton`, caso contrário `inpaint`.
 
 ## Tech stack
 - **Linguagem:** Python
-- **Deep Learning:** PyTorch, 🤗 Diffusers, CatVTON, IP-Adapter
+- **Deep Learning:** PyTorch, Diffusers, CatVTON, IP-Adapter
 - **Visão computacional:** OpenCV, Pillow
 - **Interface:** Gradio
 - **Dataset:** VITON-HD (subconjunto de teste em `data/test/`)

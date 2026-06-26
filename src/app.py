@@ -1,23 +1,12 @@
-"""
-Virtual Try-On — interface Gradio.
-
-A UI é deliberadamente fina: toda a lógica vive em tryon.py. Aqui só ligamos o dataset
-ao motor e mostramos o resultado.
-
-Como correr:
-    python src/app.py
-Variáveis de ambiente:
-    TRYON_BACKEND = auto | catvton | inpaint   (default: auto)
-    GRADIO_SHARE  = 1                            (gera link público — usar no Colab)
-"""
-
+# Interface Gradio. A logica esta toda no tryon.py.
+# Correr: python src/app.py   (TRYON_BACKEND=auto|catvton|inpaint, GRADIO_SHARE=1)
 import os
 
 import gradio as gr
 
 try:
     from tryon import DatasetLoader, VirtualTryOn
-except ImportError:  # quando importado como pacote (ex.: a partir do notebook)
+except ImportError:
     from src.tryon import DatasetLoader, VirtualTryOn
 
 
@@ -35,15 +24,15 @@ def build_app():
 
     with gr.Blocks(title="Virtual Try-On") as app:
         gr.Markdown(
-            f"# 👔 Virtual Try-On\n"
+            f"# Virtual Try-On\n"
             f"Backend ativo: **{engine.backend_name}** "
-            f"({'modelo fiel — GPU' if engine.backend_name == 'catvton' else 'baseline local — qualidade limitada'})"
+            f"({'modelo fiel - GPU' if engine.backend_name == 'catvton' else 'baseline local - qualidade limitada'})"
         )
         with gr.Row():
             with gr.Column():
                 person = gr.Dropdown(data.get_available_models(), label="1. Pessoa")
-                cloth = gr.Dropdown(data.get_available_garments(), label="2. Peça de roupa")
-                btn = gr.Button("⚡ Vestir", variant="primary")
+                cloth = gr.Dropdown(data.get_available_garments(), label="2. Peca de roupa")
+                btn = gr.Button("Vestir", variant="primary")
             with gr.Column():
                 out = gr.Image(label="Resultado")
         btn.click(run, inputs=[person, cloth], outputs=out)
